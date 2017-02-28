@@ -22,13 +22,18 @@ button {
     top: 0;
     left: 0;
     right: 0;
-    padding: 2rem;
+    padding: 2rem 2rem 4rem 2rem;
     display: flex;
     justify-content: space-between;
+    background: linear-gradient(to top, transparent 10%, rgba(gray, 0.5) 100%);
     button { float: right; }
-    .info {
+    .info-container {
         position: relative;
+    }
+    .info {
+        position: absolute;
         top: 20px;
+        left: -350px;
         padding: 1.2rem;
         width: 350px;
         z-index: -1;
@@ -72,7 +77,7 @@ button {
         height: 100px;
         top: -100px;
         left: 0;
-        border: 8px solid #4a148c;
+        border: 8px solid #e74c3c;
         border-radius: 50%;
     }
     .pickers-container {
@@ -93,6 +98,11 @@ button {
                     background-position: -80px 0;
                 }
             }
+            &:nth-of-type(3) {
+                .picker-button {
+                    background-position: -160px 0;
+                }
+            }
             &:nth-of-type(4) {
                 .picker-button {
                     background-position: -240px 0;
@@ -101,7 +111,7 @@ button {
             .picker-button {
                 background-image: url('/assets/buttons-sprites.png');
                 background-repeat: no-repeat;
-                background-color: #cecece;
+                background-color: #cfcfcf;
                 border: 8px solid #fff;
                 background-position: 0 0;
                 width: 100%;

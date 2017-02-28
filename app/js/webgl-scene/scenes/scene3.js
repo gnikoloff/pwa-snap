@@ -38,11 +38,11 @@ const init = (scene) => {
     pipeMesh.material.map = pipeTex
   })
   
-  eyeMesh.position.set(200, 0, 1)
+  eyeMesh.position.set(200, 0, 0)
   scene.add(eyeMesh)
-  moustacheMesh.position.set(200, 0, 1)
+  moustacheMesh.position.set(200, 0, 0.2)
   scene.add(moustacheMesh)
-  pipeMesh.position.set(200, 0, 0.9)
+  pipeMesh.position.set(200, 0, 0)
   scene.add(pipeMesh)
 }
 
@@ -53,13 +53,13 @@ const updateFrame = (positions) => {
       if (moustacheMesh.material.map) moustacheMesh.material.map.needsUpdate = true
       if (pipeMesh.material.map) pipeMesh.material.map.needsUpdate = true
 
-      eyeMesh.position.x =  positions[32][0] + 300
-      eyeMesh.position.y = -positions[32][1] - 10
+      eyeMesh.position.x =  positions[32][0] + 297.5
+      eyeMesh.position.y = -positions[32][1] - 60
       moustacheMesh.position.x =  positions[37][0] + 300
-      moustacheMesh.position.y = -positions[37][1] - 10
+      moustacheMesh.position.y = -positions[37][1] - 45.5
       
       pipeMesh.position.x =  positions[47][0] + 300 - 15
-      pipeMesh.position.y = -positions[47][1] - 10  - 5
+      pipeMesh.position.y = -positions[47][1] - 10  - 40
     }
   }
 }

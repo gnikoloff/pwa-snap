@@ -83,7 +83,7 @@ export default class Scene extends React.Component {
         this.renderer.setSize(this.width, this.height)
         this.renderer.setClearColor(0x111111)
         
-        this.camera.position.set(0, 0, 100)
+        this.camera.position.set(0, 0, 85)
         this.camera.lookAt(new THREE.Vector3(0, 0, 0))
 
         let geometry = new THREE.PlaneBufferGeometry(150, 75)
