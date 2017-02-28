@@ -17,22 +17,24 @@ class App extends React.Component {
         }
         this.setActiveScene = this.setActiveScene.bind(this)
 
-        //if (navigator.serviceWorker) {
-        //    navigator.serviceWorker.register('./service-worker.js')
-        //        .then(function (registration) {
-        //            console.log(registration);
-        //        })
-        //        .catch(function (e) {
-        //            console.error(e);
-        //        })
-        //} else {
-        //    console.log('Service Worker is not supported in this browser.');
-        //}
+        if (navigator.serviceWorker) {
+            navigator.serviceWorker.register('./service-worker.js', { scope: '/' })
+                .then(function (registration) {
+                    console.log(registration);
+                })
+                .catch(function (e) {
+                    console.error(e);
+                })
+        } else {
+            console.log('Service Worker is not supported in this browser.');
+        }
         
     }
+    
     setActiveScene ( activeSceneNum ) {
         this.setState({ activeSceneNum })
     }
+
     render () {
         return (
             <div>
