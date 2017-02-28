@@ -6,8 +6,8 @@ export default class VideoTexture extends React.Component {
     constructor () {
         super()
 
-        this.width = 256
-        this.height = 128
+        this.width = 512
+        this.height = 256
         this.canvas = document.createElement('canvas')
         this.canvas.style.position = 'fixed'
         this.canvas.style.bottom = '24px'

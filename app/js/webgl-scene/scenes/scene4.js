@@ -30,8 +30,8 @@ const updateFrame = (positions) => {
     if (positions[62]) {
       if (glassesMesh.material.map) glassesMesh.material.map.needsUpdate = true
       
-      glassesMesh.position.x =  positions[41][0] + 500
-      glassesMesh.position.y = -positions[41][1] - 40
+      glassesMesh.position.x =  positions[41][0] + 495
+      glassesMesh.position.y = -positions[41][1] - 30
 
       let scaleFactor = (positions[14][0] - positions[1][0]) / 40
       glassesMesh.scale.set(scaleFactor, scaleFactor, 1)

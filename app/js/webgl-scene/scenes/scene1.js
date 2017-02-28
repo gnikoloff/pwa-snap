@@ -33,7 +33,7 @@ const updateFrame = (positions) => {
       mesh.position.x = positions[62][0] - 105
       mesh.position.y = -positions[62][1] - 20
       
-      let scaleFactor = (positions[14][0] - positions[1][0]) / 65
+      let scaleFactor = (positions[14][0] - positions[1][0]) / 60
       mesh.scale.set(scaleFactor, scaleFactor, 1)
       let angle = positions[20][1] - positions[16][1] 
       mesh.rotation.z = Math.sin(angle * Math.PI / 180)

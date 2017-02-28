@@ -1,6 +1,8 @@
 const webpack = require('webpack');
 const path = require('path');
 
+const CompressionPlugin = require("compression-webpack-plugin")
+
 const srcPath = path.join(__dirname, 'app');
 const buildPath = path.join(__dirname, 'public');
 
@@ -34,10 +36,15 @@ const config = {
             }
         ]
     },
-    plugins: [
-        //new webpack.optimize.DedupePlugin(), //dedupe similar code 
-        //new webpack.optimize.UglifyJsPlugin(), //minify everything
-        //new webpack.optimize.AggressiveMergingPlugin()//Merge chunks 
+    plugins: [ 
+        new webpack.optimize.UglifyJsPlugin(),        
+        new webpack.optimize.AggressiveMergingPlugin(),
+        new CompressionPlugin({
+            asset: "[path].gz[query]",
+            algorithm: "gzip",
+            threshold: 10240,
+            minRatio: 0.8
+        })
     ],
     stats: {
         colors: true

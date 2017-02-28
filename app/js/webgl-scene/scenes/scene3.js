@@ -53,13 +53,13 @@ const updateFrame = (positions) => {
       if (moustacheMesh.material.map) moustacheMesh.material.map.needsUpdate = true
       if (pipeMesh.material.map) pipeMesh.material.map.needsUpdate = true
 
-      eyeMesh.position.x =  positions[32][0] + 297.5
+      eyeMesh.position.x =  positions[32][0] + 290.5
       eyeMesh.position.y = -positions[32][1] - 42.5
-      moustacheMesh.position.x =  positions[37][0] + 297
-      moustacheMesh.position.y = -positions[37][1] - 35.5
+      moustacheMesh.position.x =  positions[37][0] + 295
+      moustacheMesh.position.y = -positions[37][1] - 32.5
       
-      pipeMesh.position.x =  positions[47][0] + 300 - 15
-      pipeMesh.position.y = -positions[47][1] - 10  - 25
+      pipeMesh.position.x =  positions[47][0] + 295 - 15
+      pipeMesh.position.y = -positions[47][1] - 10  - 22.5
     }
   }
 }
