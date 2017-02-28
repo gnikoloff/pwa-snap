@@ -28,7 +28,7 @@ class App extends React.Component {
         //} else {
         //    console.log('Service Worker is not supported in this browser.');
         //}
-
+        
     }
     setActiveScene ( activeSceneNum ) {
         this.setState({ activeSceneNum })

@@ -12,7 +12,7 @@ export default () => {
             <p>
                 This is a progressive web app clone of Snapchat, made to work offline. <br/>
                 Developed using React for UI, clmtrackr for face recognition and THREE.js for graphics. <br />
-                Code is available at <a href="https://github.com/gnikoloff/pwa-snap" target="_blank">Github</a>
+                Code is available at <a href="https://github.com/gnikoloff/pwa-snap" rel="noopener" target="_blank">Github</a>
             </p>
             <h3 className="section-title">About</h3>
             <p>
@@ -20,10 +20,10 @@ export default () => {
                 If you are interested in him, please don't hesitate to get in touch.
             </p>
             <ul className="contact-links">
-                <li><a target="_blank" href="http://gnikoloff.com">Website</a></li>
-                <li><a target="_blank" href="https://twitter.com/georgiNikoloff">Twitter</a></li>
-                <li><a target="_blank" href="http://codepen.io/gbnikolov.com">Codepen</a></li>
-                <li><a target="_blank" href="mailto:nikoloffgeorgi@gmail.com">Email</a></li>
+                <li><a rel="noopener" target="_blank" href="http://gnikoloff.com">Website</a></li>
+                <li><a rel="noopener" target="_blank" href="https://twitter.com/georgiNikoloff">Twitter</a></li>
+                <li><a rel="noopener" target="_blank" href="http://codepen.io/gbnikolov.com">Codepen</a></li>
+                <li><a rel="noopener" target="_blank" href="mailto:nikoloffgeorgi@gmail.com">Email</a></li>
             </ul>
         </div>
     )

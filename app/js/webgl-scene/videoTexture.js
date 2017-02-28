@@ -21,6 +21,7 @@ export default class VideoTexture extends React.Component {
     componentDidMount () {
         //this.el.appendChild(this.canvas)
         this.props.getTexture(new THREE.Texture(this.canvas))
+        document.querySelector('#load-msg').style.transform = 'translate3d(0, 100%, 0)'
     }
 
     render () {

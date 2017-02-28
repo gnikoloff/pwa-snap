@@ -1,12 +1,47 @@
 <!doctype html>
-<html lang="">
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title>PWA Snap</title>
-        <meta name="description" content="">
+        <meta name="description" content="PWA Snapchat Clone with Face Tracking & WebGL">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
+        <meta property="og:url" content="https://pwa-snap.gnikoloff.com" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="PWA Snap" />
+        <meta property="og:description" content="Progressive web app Snapchat clone" />
+        <meta property="og:image" content="https://pwa-snap.gnikoloff.com/assets/social/facebook-pwa-snap.png" />
+        <meta property="og:site_name" content="PWA Snapchat Clone">
+
+        <meta name="twitter:card" content="photo">
+        <meta name="twitter:site" content="@georgiNikoloff">
+        <meta name="twitter:title" content="PWA Snapchat Clone">
+        <meta name="twitter:image" content="https://pwa-snap.gnikoloff.com/assets/social/twitter-pwa-snap.png">
+        <meta name="twitter:url" content="https://pwa-snap.gnikoloff.com">
+
+        <link rel="apple-touch-icon-precomposed" sizes="57x57"   href="assets/social/apple-touch-icon-57x57.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="assets/social/apple-touch-icon-114x114.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="72x72"   href="assets/social/apple-touch-icon-72x72.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/social/apple-touch-icon-144x144.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="60x60"   href="assets/social/apple-touch-icon-60x60.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="120x120" href="assets/social/apple-touch-icon-120x120.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="76x76"   href="assets/social/apple-touch-icon-76x76.png" />
+        <link rel="apple-touch-icon-precomposed" sizes="152x152" href="assets/social/apple-touch-icon-152x152.png" />
+        <link rel="icon" type="image/png" href="assets/social/favicon-196x196.png" sizes="196x196" />
+        <link rel="icon" type="image/png" href="assets/social/favicon-96x96.png" sizes="96x96" />
+        <link rel="icon" type="image/png" href="assets/social/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="assets/social/favicon-16x16.png" sizes="16x16" />
+        <link rel="icon" type="image/png" href="assets/social/favicon-128.png" sizes="128x128" />
+        <meta name="application-name" content="PWA Snap"/>
+        <meta name="theme-color" content="#e67e22">
+        <meta name="msapplication-TileColor"         content="#FFFFFF" />
+        <meta name="msapplication-TileImage"         content="assets/social/mstile-144x144.png" />
+        <meta name="msapplication-square70x70logo"   content="assets/social/mstile-70x70.png" />
+        <meta name="msapplication-square150x150logo" content="assets/social/mstile-150x150.png" />
+        <meta name="msapplication-wide310x150logo"   content="assets/social/mstile-310x150.png" />
+        <meta name="msapplication-square310x310logo" content="assets/social/mstile-310x310.png" />
+
         <link rel="manifest" href="/manifest.json">
 
         <style>
@@ -19,11 +54,61 @@
                 line-height: 23px;
                 overflow: hidden;
             }
+            #load-msg {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background: #111;
+                display: flex;
+                font-size: 16px;
+                align-items: center;
+                justify-content: center;
+                z-index: 999;
+
+                transition: transform 0.2s ease-out;
+            }
+            #load-msg ul { display: flex; }
+            #load-msg ul li {
+                list-style: none;
+                animation: blip 0.3s ease-in-out infinite;
+            }
+            #load-msg ul li:nth-of-type(2) { animation-delay: 0.5s; }
+            #load-msg ul li:nth-of-type(3) { animation-delay: 0.3s; }
+            @keyframes blip {
+                0%   { opacity: 0; }
+                50%  { opacity: 50%; }
+                100% { opacity: 100%; }
+            }
+            .bulletin {
+                position: fixed;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                left: 0;
+                background: #111;
+                color: #fff;
+                padding: 24px;  
+                z-index: 990;
+            }
+            .no-features {
+                display: none;
+            }
         </style>
 
     </head>
     <body>
-        
+        <noscript>
+            <div class="bulletin">
+                This website requires Javascript to run. Please try on different device / browser or enable JS.
+            </div>
+        </noscript>
+        <div id="load-msg">Fetching resources <ul><li>.</li><li>.</li><li>.</li></ul></div>
+        <div class="bulletin no-features">
+            This website with its experience relies on modern features, such as WebGL, HTML5 and CSS3. Please upgrade your browser.
+        </div>
+
         <div id="app-container"></div>
 
         <audio preload id="audio-switch">
@@ -31,6 +116,14 @@
         </audio>
 
         <script async src="bundle.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+        <script>
+            if (!Modernizr.canvas ||
+                !Modernizr.flexbox ||
+                !Modernizr.webgl) {
+                    document.querySelector('.no-features').style.display = 'none'
+                }
+        </script>
 
     </body>
 </html>

@@ -3,22 +3,23 @@
   "name": "PWA Snapchat Clone",
   "display": "standalone",
   "background_color": "#111",
+  "theme_color": "#e67e22",
   "description": "Georgi Nikoloff's Snapchat Clone with ClmTrackr and WebGL",
   "icons": [
     {
-      "src": "launcher-icon-2x.png",
+      "src":   "/social/favicon-96x96.png",
       "sizes": "96x96",
-      "type": "image/png"
+      "type":  "image/png"
     },
     {
-      "src": "launcher-icon-3x.png",
+      "src":   "/social/mstile-144x144.png",
       "sizes": "144x144",
-      "type": "image/png"
+      "type":  "image/png"
     },
     {
-      "src": "launcher-icon-4x.png",
+      "src":   "/social/favicon-192x192.png",
       "sizes": "192x192",
-      "type": "image/png"
+      "type":  "image/png"
     }
   ],
   "start_url": "/index.html"
