@@ -17,7 +17,7 @@ export default class Scene extends React.Component {
         this.width = window.innerWidth
         this.height = window.innerHeight
         this.scene = new THREE.Scene()
-        this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000)
+        this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.01, 10000)
         this.renderer = new THREE.WebGLRenderer()
         this.scenesGroup = new THREE.Group()
         //this.composer = new ComposerFX(this.width, this.height).init(this.camera, this.scene, this.renderer)
@@ -108,7 +108,7 @@ export default class Scene extends React.Component {
 
     makeScenes () {
         let { scenes } = this.props.scenes
-        Scene1.init(this.scenesGroup, this.videoMesh.material.map)
+        Scene1.init(this.scenesGroup)
         Scene2.init(this.scenesGroup)
         Scene3.init(this.scenesGroup)
         Scene4.init(this.scenesGroup)
@@ -127,7 +127,7 @@ export default class Scene extends React.Component {
         this.videoMesh.material.map.needsUpdate = true
         if (this.facePositions) {
             Scene1.updateFrame(this.facePositions)
-            Scene2.updateFrame(this.facePositions)
+            Scene2.updateFrame(this.facePositions, ts)
             Scene3.updateFrame(this.facePositions)
             Scene4.updateFrame(this.facePositions)
             // meshes.forEach((m, i) => {

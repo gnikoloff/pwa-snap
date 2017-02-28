@@ -1,6 +1,6 @@
 const THREE = require('three')
 
-const geometry = new THREE.PlaneGeometry(40, 40)
+const geometry = new THREE.PlaneGeometry(40, 80)
 let mesh
 let texLoaded = false
 
@@ -16,7 +16,7 @@ const stop = () => {
 
 const init = (scene) => {
   let loader = new THREE.TextureLoader()
-  loader.load('/assets/PNGPIX-COM-Batman-Mask-PNG-Transparent-Image-1.png', (tex) => {
+  loader.load('/assets/batman-mask.png', (tex) => {
     const material = new THREE.MeshBasicMaterial({ map: tex, transparent: true })
     mesh = new THREE.Mesh(geometry, material)
     mesh.position.set(0, 0, 0)
@@ -31,9 +31,9 @@ const updateFrame = (positions) => {
     
     if (positions[62] && texLoaded) {
       mesh.position.x = positions[62][0] - 105
-      mesh.position.y = -positions[62][1] - 23
+      mesh.position.y = -positions[62][1] - 20
       
-      let scaleFactor = (positions[14][0] - positions[1][0]) / 35
+      let scaleFactor = (positions[14][0] - positions[1][0]) / 65
       mesh.scale.set(scaleFactor, scaleFactor, 1)
       let angle = positions[20][1] - positions[16][1] 
       mesh.rotation.z = Math.sin(angle * Math.PI / 180)

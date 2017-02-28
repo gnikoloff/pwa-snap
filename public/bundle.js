@@ -53010,7 +53010,7 @@ var Scene = function (_React$Component) {
         _this.width = window.innerWidth;
         _this.height = window.innerHeight;
         _this.scene = new THREE.Scene();
-        _this.camera = new THREE.PerspectiveCamera(45, _this.width / _this.height, 0.1, 1000);
+        _this.camera = new THREE.PerspectiveCamera(45, _this.width / _this.height, 0.01, 10000);
         _this.renderer = new THREE.WebGLRenderer();
         _this.scenesGroup = new THREE.Group();
         //this.composer = new ComposerFX(this.width, this.height).init(this.camera, this.scene, this.renderer)
@@ -53116,7 +53116,7 @@ var Scene = function (_React$Component) {
         value: function makeScenes() {
             var scenes = this.props.scenes.scenes;
 
-            _Scene2.default.init(this.scenesGroup, this.videoMesh.material.map);
+            _Scene2.default.init(this.scenesGroup);
             _Scene4.default.init(this.scenesGroup);
             _Scene6.default.init(this.scenesGroup);
             _Scene8.default.init(this.scenesGroup);
@@ -53136,7 +53136,7 @@ var Scene = function (_React$Component) {
             this.videoMesh.material.map.needsUpdate = true;
             if (this.facePositions) {
                 _Scene2.default.updateFrame(this.facePositions);
-                _Scene4.default.updateFrame(this.facePositions);
+                _Scene4.default.updateFrame(this.facePositions, ts);
                 _Scene6.default.updateFrame(this.facePositions);
                 _Scene8.default.updateFrame(this.facePositions);
                 // meshes.forEach((m, i) => {
@@ -53396,7 +53396,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 var THREE = __webpack_require__(21);
 
-var geometry = new THREE.PlaneGeometry(40, 40);
+var geometry = new THREE.PlaneGeometry(40, 80);
 var mesh = void 0;
 var texLoaded = false;
 
@@ -53412,7 +53412,7 @@ var stop = function stop() {
 
 var init = function init(scene) {
   var loader = new THREE.TextureLoader();
-  loader.load('/assets/PNGPIX-COM-Batman-Mask-PNG-Transparent-Image-1.png', function (tex) {
+  loader.load('/assets/batman-mask.png', function (tex) {
     var material = new THREE.MeshBasicMaterial({ map: tex, transparent: true });
     mesh = new THREE.Mesh(geometry, material);
     mesh.position.set(0, 0, 0);
@@ -53427,9 +53427,9 @@ var updateFrame = function updateFrame(positions) {
 
     if (positions[62] && texLoaded) {
       mesh.position.x = positions[62][0] - 105;
-      mesh.position.y = -positions[62][1] - 23;
+      mesh.position.y = -positions[62][1] - 20;
 
-      var scaleFactor = (positions[14][0] - positions[1][0]) / 35;
+      var scaleFactor = (positions[14][0] - positions[1][0]) / 65;
       mesh.scale.set(scaleFactor, scaleFactor, 1);
       var angle = positions[20][1] - positions[16][1];
       mesh.rotation.z = Math.sin(angle * Math.PI / 180);
@@ -53456,9 +53456,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 var THREE = __webpack_require__(21);
 
-var lines = [];
-
+var spheres = [];
 var active = false;
+
+var vertShader = '\n  varying vec3 vPos;\n\n  void main() {\n    vPos = position;\n    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n  }\n';
+var fragShader = '\n  uniform float time;\n  varying vec3 vPos;\n  void main() {\n    vec4 color = vec4(0.0, 0.0, 0.0, 1.0);\n    color.r = sin(sin(vPos.x * 15.0) * 0.5 + cos(vPos.y * 10.0) + time / 1000.0);\n    color.r = sin(sin(vPos.y * 7.5) * 0.5 + cos(vPos.x * 5.0) + time / 1000.0);\n    color.b = cos(vPos.x * vPos.y) * 0.008 + sin(time / 1000.0) * 0.5;\n    gl_FragColor = color;\n  }\n';
 
 var play = function play() {
   active = true;
@@ -53468,36 +53470,30 @@ var stop = function stop() {
   active = false;
 };
 
-var init = function init(scene, texture) {
-
-  var lineMaterial = new THREE.LineBasicMaterial({
-    color: 0xFFFF00
+var init = function init(scene) {
+  var pGeometry = new THREE.SphereGeometry(1, 20);
+  var pMaterial = new THREE.ShaderMaterial({
+    uniforms: {
+      time: { type: 'f', value: 0.0 }
+    },
+    vertexShader: vertShader,
+    fragmentShader: fragShader
   });
   for (var i = 0; i < 72; i += 1) {
-    var lineGeometry = new THREE.Geometry();
-    lineGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    lineGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    var line = new THREE.Line(lineGeometry, lineMaterial);
-    line.position.set(0, 0, 1);
-    scene.add(line);
-    lines.push(line);
+    var p = new THREE.Mesh(pGeometry, pMaterial);
+    scene.add(p);
+    spheres.push(p);
   }
 };
 
-var updateFrame = function updateFrame(positions) {
+var updateFrame = function updateFrame(positions, ts) {
   if (active === true) {
-    lines.forEach(function (l, i) {
+    spheres.forEach(function (p, i) {
       if (positions[i]) {
-        l.geometry.verticesNeedUpdate = true;
-        l.geometry.vertices[0].x = positions[i][0] + 100;
-        l.geometry.vertices[0].y = -positions[i][1];
-        if (positions[i + 1]) {
-          l.geometry.vertices[1].x = positions[i + 1][0] + 100;
-          l.geometry.vertices[1].y = -positions[i + 1][1];
-        } else {
-          l.geometry.vertices[1].x = positions[i - 1][0] + 100;
-          l.geometry.vertices[1].y = -positions[i - 1][1];
-        }
+        p.material.uniforms.time.value = ts;
+        p.position.x = positions[i][0] * 0.575 + 144.5;
+        p.position.y = -positions[i][1] * 0.575 - 105 - p.position.y * 0.1;
+        p.position.z = 0.2;
       }
     });
   }
@@ -53576,12 +53572,12 @@ var updateFrame = function updateFrame(positions) {
       if (pipeMesh.material.map) pipeMesh.material.map.needsUpdate = true;
 
       eyeMesh.position.x = positions[32][0] + 297.5;
-      eyeMesh.position.y = -positions[32][1] - 60;
-      moustacheMesh.position.x = positions[37][0] + 300;
-      moustacheMesh.position.y = -positions[37][1] - 45.5;
+      eyeMesh.position.y = -positions[32][1] - 42.5;
+      moustacheMesh.position.x = positions[37][0] + 297;
+      moustacheMesh.position.y = -positions[37][1] - 35.5;
 
       pipeMesh.position.x = positions[47][0] + 300 - 15;
-      pipeMesh.position.y = -positions[47][1] - 10 - 40;
+      pipeMesh.position.y = -positions[47][1] - 10 - 25;
     }
   }
 };
@@ -63081,7 +63077,7 @@ exports = module.exports = __webpack_require__(98)();
 
 
 // module
-exports.push([module.i, "canvas {\n  display: block; }\n\n#webcam {\n  display: none; }\n\na {\n  color: #fff; }\n\nbutton {\n  cursor: pointer; }\n\n.app-header {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  padding: 2rem 2rem 4rem 2rem;\n  display: flex;\n  justify-content: space-between;\n  background: linear-gradient(to top, transparent 10%, rgba(128, 128, 128, 0.5) 100%); }\n  .app-header button {\n    float: right; }\n  .app-header .info-container {\n    position: relative; }\n  .app-header .info {\n    position: absolute;\n    top: 20px;\n    left: -400px;\n    padding: 1.2rem;\n    width: 400px;\n    z-index: -1; }\n    .app-header .info.open .info-content {\n      opacity: 1;\n      transform: translate3d(0, 0, 0); }\n    .app-header .info.open .info-background {\n      transform: scale3d(1, 1, 1); }\n    .app-header .info .info-content {\n      opacity: 0;\n      transform: translate3d(0, 20px, 0);\n      transition: opacity 0.2s ease-out 0.1s,\r transform 0.2s ease-out 0.1s; }\n    .app-header .info .info-background {\n      position: absolute;\n      top: 0px;\n      left: 0;\n      bottom: 0;\n      right: 0;\n      z-index: -1;\n      background: rgba(18, 18, 18, 0.56);\n      transform: scale3d(0, 1, 1);\n      transform-origin: 100% 0 0;\n      transition: transform 0.2s ease-out; }\n\n.effect-picker {\n  position: fixed;\n  bottom: 0;\n  left: 50%;\n  margin-left: -60px;\n  padding: 2rem 0;\n  display: flex; }\n  .effect-picker:before {\n    content: '';\n    position: absolute;\n    width: 100px;\n    height: 100px;\n    top: -100px;\n    left: 0;\n    border: 8px solid #e74c3c;\n    border-radius: 50%; }\n  .effect-picker .pickers-container {\n    position: absolute;\n    top: -90px;\n    left: 10px;\n    width: 620px;\n    display: flex;\n    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1); }\n    .effect-picker .pickers-container .picker-button-container {\n      width: 80px;\n      height: 80px;\n      margin-right: 40px; }\n      .effect-picker .pickers-container .picker-button-container:nth-of-type(2) .picker-button {\n        background-position: -80px 0; }\n      .effect-picker .pickers-container .picker-button-container:nth-of-type(3) .picker-button {\n        background-position: -160px 0; }\n      .effect-picker .pickers-container .picker-button-container:nth-of-type(4) .picker-button {\n        background-position: -240px 0; }\n      .effect-picker .pickers-container .picker-button-container .picker-button {\n        background-image: url(\"/assets/buttons-sprites.png\");\n        background-repeat: no-repeat;\n        background-color: #cfcfcf;\n        border: 8px solid #fff;\n        background-position: 0 0;\n        width: 100%;\n        height: 100%;\n        text-align: center;\n        border-radius: 50%; }\n        .effect-picker .pickers-container .picker-button-container .picker-button:focus {\n          outline: 0; }\n\n.info-button {\n  background: none;\n  border: none;\n  color: #fff;\n  position: relative;\n  font-size: 18px; }\n  .info-button:before {\n    content: 'Close';\n    position: absolute;\n    top: 0;\n    left: -52px;\n    transition: opacity 0.2s ease-out,\r transform 0.2s ease-out;\n    opacity: 0;\n    transform: translateX(-12px); }\n  .info-button.open:before {\n    opacity: 1;\n    transform: translateX(0); }\n  .info-button:focus {\n    outline: 0; }\n\n.info-content {\n  color: rgba(255, 255, 255, 0.88); }\n  .info-content ul li {\n    list-style: none; }\n  .info-content .section-title {\n    margin-top: 1rem;\n    font-size: 14px;\n    font-weight: 500;\n    text-transform: uppercase;\n    letter-spacing: 2px;\n    color: #fff; }\n    .info-content .section-title:first-of-type {\n      margin-top: 0; }\n  .info-content .contact-links {\n    display: flex; }\n    .info-content .contact-links li {\n      margin-right: 10px; }\n      .info-content .contact-links li:last-of-type {\n        margin-right: 0; }\n", ""]);
+exports.push([module.i, "canvas {\n  display: block; }\n\n#webcam {\n  display: none; }\n\na {\n  color: #fff; }\n\nbutton {\n  cursor: pointer; }\n\n.app-header {\n  position: fixed;\n  top: 0;\n  left: 0;\n  right: 0;\n  padding: 2rem 2rem 4rem 2rem;\n  display: flex;\n  justify-content: space-between;\n  background: linear-gradient(to top, transparent 10%, rgba(128, 128, 128, 0.5) 100%); }\n  .app-header button {\n    float: right; }\n  .app-header .info-container {\n    position: relative; }\n  .app-header .info {\n    position: absolute;\n    top: 20px;\n    left: -400px;\n    padding: 1.2rem;\n    width: 400px;\n    z-index: -1; }\n    .app-header .info.open .info-content {\n      opacity: 1;\n      transform: translate3d(0, 0, 0); }\n    .app-header .info.open .info-background {\n      transform: scale3d(1, 1, 1); }\n    .app-header .info .info-content {\n      opacity: 0;\n      transform: translate3d(0, 20px, 0);\n      transition: opacity 0.2s ease-out 0.1s,\r transform 0.2s ease-out 0.1s; }\n    .app-header .info .info-background {\n      position: absolute;\n      top: 0px;\n      left: 0;\n      bottom: 0;\n      right: 0;\n      z-index: -1;\n      background: rgba(18, 18, 18, 0.56);\n      transform: scale3d(0, 1, 1);\n      transform-origin: 100% 0 0;\n      transition: transform 0.2s ease-out; }\n\n.effect-picker {\n  position: fixed;\n  bottom: 0;\n  left: 50%;\n  margin-left: -60px;\n  padding: 2rem 0;\n  display: flex; }\n  .effect-picker:before {\n    content: '';\n    position: absolute;\n    width: 100px;\n    height: 100px;\n    top: -100px;\n    left: 0;\n    border: 8px solid #e74c3c;\n    border-radius: 50%; }\n  .effect-picker .pickers-container {\n    position: absolute;\n    top: -90px;\n    left: 10px;\n    width: 620px;\n    display: flex;\n    transition: transform 0.2s cubic-bezier(0.23, 1, 0.32, 1); }\n    .effect-picker .pickers-container .picker-button-container {\n      width: 80px;\n      height: 80px;\n      margin-right: 40px; }\n      .effect-picker .pickers-container .picker-button-container:nth-of-type(2) .picker-button {\n        background-position: -160px 0; }\n      .effect-picker .pickers-container .picker-button-container:nth-of-type(3) .picker-button {\n        background-position: 0px 0; }\n      .effect-picker .pickers-container .picker-button-container:nth-of-type(4) .picker-button {\n        background-position: -240px 0; }\n      .effect-picker .pickers-container .picker-button-container .picker-button {\n        background-image: url(\"/assets/buttons-sprites.png\");\n        background-repeat: no-repeat;\n        background-color: #cfcfcf;\n        border: 8px solid #fff;\n        background-position: -80px 0;\n        width: 100%;\n        height: 100%;\n        text-align: center;\n        border-radius: 50%; }\n        .effect-picker .pickers-container .picker-button-container .picker-button:focus {\n          outline: 0; }\n\n.info-button {\n  background: none;\n  border: none;\n  color: #fff;\n  position: relative;\n  font-size: 18px; }\n  .info-button:before {\n    content: 'Close';\n    position: absolute;\n    top: 0;\n    left: -52px;\n    transition: opacity 0.2s ease-out,\r transform 0.2s ease-out;\n    opacity: 0;\n    transform: translateX(-12px); }\n  .info-button.open:before {\n    opacity: 1;\n    transform: translateX(0); }\n  .info-button:focus {\n    outline: 0; }\n\n.info-content {\n  color: rgba(255, 255, 255, 0.88); }\n  .info-content ul li {\n    list-style: none; }\n  .info-content .section-title {\n    margin-top: 1rem;\n    font-size: 14px;\n    font-weight: 500;\n    text-transform: uppercase;\n    letter-spacing: 2px;\n    color: #fff; }\n    .info-content .section-title:first-of-type {\n      margin-top: 0; }\n  .info-content .contact-links {\n    display: flex; }\n    .info-content .contact-links li {\n      margin-right: 10px; }\n      .info-content .contact-links li:last-of-type {\n        margin-right: 0; }\n", ""]);
 
 // exports
 
