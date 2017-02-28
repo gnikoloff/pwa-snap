@@ -14,7 +14,6 @@ export default class Scene extends React.Component {
         super()
         
         this.facePositions = []
-
         this.width = window.innerWidth
         this.height = window.innerHeight
         this.scene = new THREE.Scene()
@@ -23,13 +22,16 @@ export default class Scene extends React.Component {
         this.scenesGroup = new THREE.Group()
         //this.composer = new ComposerFX(this.width, this.height).init(this.camera, this.scene, this.renderer)
         this.audio = document.querySelector('#audio-switch')
-
+        
         this.videoMesh = null
 
         this.setScene()
-
+        
         this.getTexture = this.getTexture.bind(this)
         this.updateFacePoisitions = this.updateFacePoisitions.bind(this)
+        this.onResizeScene = this.onResizeScene.bind(this)
+
+        window.onresize = this.onResizeScene
     }
 
     componentDidMount () {
@@ -77,6 +79,14 @@ export default class Scene extends React.Component {
                     updateFacePositions={this.updateFacePoisitions}/>
             </section>
         )
+    }
+
+    onResizeScene () {
+        this.width = window.innerWidth
+        this.height = window.innerHeight
+        this.camera.aspect = this.width / this.height
+        this.camera.updateProjectionMatrix()
+        this.renderer.setSize( this.width, this.height );
     }
 
     setScene () {
