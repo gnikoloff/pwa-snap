@@ -1,17 +1,7 @@
-// - General
-* { margin: 0; padding: 0; box-sizing: content-box; }
-body {
-    background: #111;
-    color: #fff;
-    font-family: Verdana, Geneva, sans-serif;
-    font-size: 18px;
-    line-height: 26px;
-    overflow: hidden;
-}
 canvas { display: block; }
 #webcam { display: none; }
 // #canvas-texture { display: none; }
-
+a { color: #fff; }
 button {
     cursor: pointer;
 }
@@ -33,9 +23,9 @@ button {
     .info {
         position: absolute;
         top: 20px;
-        left: -350px;
+        left: -400px;
         padding: 1.2rem;
-        width: 350px;
+        width: 400px;
         z-index: -1;
         &.open {
             .info-content { opacity: 1; transform: translate3d(0, 0, 0); }
@@ -150,5 +140,28 @@ button {
     }
     &:focus {
         outline: 0;
+    }
+}
+
+.info-content {
+    color: rgba(255, 255, 255, 0.88);
+    ul {
+        li { list-style: none; }
+    }
+    .section-title {
+        margin-top: 1rem;        
+        font-size: 14px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #fff;
+        &:first-of-type { margin-top: 0; }
+    }
+    .contact-links {
+        display: flex;
+        li {
+            margin-right: 10px;
+            &:last-of-type { margin-right: 0; }
+        }
     }
 }

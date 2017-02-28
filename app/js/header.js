@@ -1,5 +1,7 @@
 import React from 'react'
 
+import InfoContent from './info-content'
+
 export default class Header extends React.Component {
     constructor () {
         super()
@@ -41,12 +43,7 @@ export default class Header extends React.Component {
                         ref={el => this.dialogEl = el}
                         className="info">
                         <div className="info-background"></div>
-                        <div className="info-content">
-                            <h3 className="section-title">Save Image    </h3>
-                            <h3 className="section-title">PWA Snap</h3>
-                            <h3 className="section-title">Info</h3>
-                            <h3 className="section-title">About</h3>
-                        </div>
+                        <InfoContent />
                     </div>
                 </div>
             </header>

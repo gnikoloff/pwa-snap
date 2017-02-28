@@ -25,7 +25,7 @@ const postShader = {
 
     void main() {
       vec2 lookUp = vUv;
-      lookUp.x += sin(0.0) * 0.05;
+      lookUp.x += sin(vPos.y + time / 1000.0) * 0.25;
       vec4 color = texture2D(texture, lookUp);
       gl_FragColor = color;
     }
@@ -66,7 +66,7 @@ export default class ComposerFX {
         this.scene.add(mesh)
     }
     updateFrame (ts) {
-        this.renderer.render(this.scene, this.camera, this.texture)
+        
         this.composer.render(this.originalScene, this.camera)
         this.copyPass.uniforms['time'].value = ts
     }

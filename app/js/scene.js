@@ -1,7 +1,7 @@
 import React from 'react'
 const THREE = require('three')
 
-import ComposerFX from './webgl-scene/composer-postprocessing'
+//import ComposerFX from './webgl-scene/composer-postprocessing'
 import VideoTexture from './webgl-scene/videoTexture'
 
 import Scene1 from './webgl-scene/scenes/Scene1'
@@ -21,7 +21,7 @@ export default class Scene extends React.Component {
         this.camera = new THREE.PerspectiveCamera(45, this.width / this.height, 0.1, 1000)
         this.renderer = new THREE.WebGLRenderer()
         this.scenesGroup = new THREE.Group()
-        this.composer = new ComposerFX(this.width, this.height).init(this.camera, this.scene, this.renderer)
+        //this.composer = new ComposerFX(this.width, this.height).init(this.camera, this.scene, this.renderer)
         this.audio = document.querySelector('#audio-switch')
 
         this.videoMesh = null
@@ -91,7 +91,8 @@ export default class Scene extends React.Component {
         this.videoMesh = new THREE.Mesh(geometry, material)
         this.videoMesh.position.z += 0.5
         this.videoMesh.position.set(0, 0, 0)
-        this.composer.addToScene(this.videoMesh)
+        this.scene.add(this.videoMesh)
+        //this.composer.addToScene(this.videoMesh)
    
     }
 
@@ -102,12 +103,13 @@ export default class Scene extends React.Component {
         Scene3.init(this.scenesGroup)
         Scene4.init(this.scenesGroup)
         this.scenesGroup.position.set(0, 150, 0)
-        this.composer.addToScene(this.scenesGroup)
+        this.scene.add(this.scenesGroup)
+        //this.composer.addToScene(this.scenesGroup)
     }
 
     updateFrame (ts) {
         window.requestAnimationFrame(this.updateFrame.bind(this))
-        this.composer.updateFrame(ts)
+        this.renderer.render(this.scene, this.camera)
         this.child.updateFrame()
         //this.camera.position.z += 0.01
         this.scenesGroup.position.x += ((this.props.activeSceneNum * -200) - this.scenesGroup.position.x) * 0.2
